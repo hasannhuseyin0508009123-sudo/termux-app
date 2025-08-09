@@ -1,0 +1,40 @@
+import os
+from datetime import datetime
+
+def list_files_by_extension(directory: str, extension: str) -> list[str]:
+    """
+    Verilen klasörde belirli uzantıya sahip dosyaları bulur ve
+    oluşturulma tarihine göre sıralar.
+
+    :param directory: Aranacak klasör yolu
+    :param extension: Dosya uzantısı, örn: '.txt'
+    :return: Dosya isimlerinin sıralı listesi
+    """
+    files = []
+    for entry in os.scandir(directory):
+        if entry.is_file() and entry.name.endswith(extension):
+            creation_time = datetime.fromtimestamp(entry.stat().st_ctime)
+            files.append((entry.name, creation_time))
+
+    # Tarihe göre artan sırada sıralama
+    files.sort(key=lambda x: x[1])
+
+    # Sadece dosya isimlerini döndür
+    return [file[0] for file in files]
+
+if __name__ == "__main__":
+    folder_path = input("Klasör yolunu girin: ")
+    file_ext = input("Aranacak dosya uzantısını girin (örn: .py, .txt): ")
+
+    try:
+        matched_files = list_files_by_extension(folder_path, file_ext)
+        if matched_files:
+            print(f"{file_ext} uzantılı dosyalar ({len(matched_files)} adet):")
+            for file_name in matched_files:
+                print(file_name)
+        else:
+            print(f"{file_ext} uzantılı dosya bulunamadı.")
+    except FileNotFoundError:
+        print("Belirtilen klasör bulunamadı.")
+    except Exception as e:
+        print(f"Hata oluştu: {e}")
