@@ -1,0 +1,19 @@
+import time
+import os
+
+colors = [
+    "\033[91m",  # Kırmızı
+    "\033[92m",  # Yeşil
+    "\033[93m",  # Sarı
+    "\033[94m",  # Mavi
+    "\033[95m",  # Mor
+    "\033[96m",  # Cam göbeği
+]
+
+text = "HAWALI KOD 🤘"
+
+while True:
+    for color in colors:
+        os.system("cls" if os.name == "nt" else "clear")
+        print(color + text + "\033[0m")
+        time.sleep(0.2)
